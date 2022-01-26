@@ -1,8 +1,10 @@
 package com.spring.demo.controllers;
 
 import com.spring.demo.models.Item;
-import java.util.Arrays;
+import com.spring.demo.services.ItemServiceDiskImpl;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,30 +16,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class DemoController {
+
+  private final ItemServiceDiskImpl itemServiceDisk;
+
+  @Autowired
+  public DemoController(ItemServiceDiskImpl itemServiceDisk) {
+    this.itemServiceDisk = itemServiceDisk;
+  }
 
   @GetMapping(path = "/items")
   public List<Item> getItems(@RequestParam(required = false) String id) {
-    return Arrays.asList(new Item());
+//    return Arrays.asList(new Item());
+    return itemServiceDisk.getItems(id);
   }
 
   @GetMapping(path = "/item")
   public Item getItemById(@RequestParam String id) {
-    return new Item();
+    return itemServiceDisk.getItemById(id);
   }
 
   @PostMapping(path = "/item")
-  public void addNewItem(@RequestBody Item item) {
-    System.out.println("add new item here");
+  public String addNewItem(@RequestBody Item item) {
+    return itemServiceDisk.addNewItem(item);
   }
 
   @PutMapping(path = "/item")
-  public void updateItemById(@RequestParam String id, @RequestBody Item item) {
-    System.out.println("update item here");
+  public String updateItemById(@RequestParam String id, @RequestBody Item item) {
+    return itemServiceDisk.updateItemById(id, item);
   }
 
   @DeleteMapping(path = "/item")
-  public void deleteItemById(@RequestParam String id) {
-    System.out.println("delete item here");
+  public String deleteItemById(@RequestParam String id) {
+    return itemServiceDisk.deleteItemById(id);
   }
 }
