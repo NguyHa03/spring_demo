@@ -1,4 +1,4 @@
-package com.spring.demo;
+package com.spring.demo.configs;
 
 import com.spring.demo.models.Item;
 import com.spring.demo.repos.ItemDiskRepo;

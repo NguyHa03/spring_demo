@@ -11,7 +11,7 @@ public interface ItemService {
 
   String addNewItem(Item item);
 
-  String updateItemById(String id, Item item);
+  String updateItemById(Item item);
 
   String deleteItemById(String id);
 

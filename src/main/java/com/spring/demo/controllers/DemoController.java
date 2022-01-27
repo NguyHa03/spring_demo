@@ -1,6 +1,8 @@
 package com.spring.demo.controllers;
 
+import com.spring.demo.configs.Names;
 import com.spring.demo.models.Item;
+import com.spring.demo.services.ItemGateway;
 import com.spring.demo.services.ItemServiceDiskImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,36 +21,39 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class DemoController {
 
-  private final ItemServiceDiskImpl itemServiceDisk;
+  private final ItemGateway itemGateway;
 
   @Autowired
-  public DemoController(ItemServiceDiskImpl itemServiceDisk) {
-    this.itemServiceDisk = itemServiceDisk;
+  public DemoController(ItemServiceDiskImpl itemServiceDisk, ItemGateway itemGateway) {
+    this.itemGateway = itemGateway;
   }
 
   @GetMapping(path = "/items")
   public List<Item> getItems(@RequestParam(required = false) String id) {
-//    return Arrays.asList(new Item());
-    return itemServiceDisk.getItems(id);
+    if (id == null || id.isBlank() || id.isEmpty()) {
+      id = "";
+    }
+    return itemGateway.getItems(Names.API_HEADER_VALUE_GET_ITEMS, id);
   }
 
   @GetMapping(path = "/item")
   public Item getItemById(@RequestParam String id) {
-    return itemServiceDisk.getItemById(id);
+    return itemGateway.getItemById(Names.API_HEADER_VALUE_GET_ITEM_BY_ID, id);
   }
 
   @PostMapping(path = "/item")
   public String addNewItem(@RequestBody Item item) {
-    return itemServiceDisk.addNewItem(item);
+    return itemGateway.addNewItem(Names.API_HEADER_VALUE_ADD_NEW_ITEM, item);
   }
 
   @PutMapping(path = "/item")
-  public String updateItemById(@RequestParam String id, @RequestBody Item item) {
-    return itemServiceDisk.updateItemById(id, item);
+  public String updateItemById(@RequestBody Item item) {
+    return itemGateway.updateItemById(Names.API_HEADER_VALUE_UPDATE_ITEM_BY_ID, item);
   }
 
   @DeleteMapping(path = "/item")
   public String deleteItemById(@RequestParam String id) {
-    return itemServiceDisk.deleteItemById(id);
+    return itemGateway.deleteItemById(Names.API_HEADER_VALUE_DELETE_ITEM_BY_ID, id);
   }
+
 }

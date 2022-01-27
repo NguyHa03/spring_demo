@@ -48,10 +48,11 @@ public class ItemServiceDiskImpl implements ItemService {
   }
 
   @Override
-  public String updateItemById(String id, Item pendingItem) {
-    Item existingItem = getItemById(id);
+  public String updateItemById(Item pendingItem) {
+    Item existingItem = getItemById(pendingItem.getId());
     if (existingItem == null) {
-      return "{ \"message\":\"Item with ID <" + id + "> does not exist in database.\" }";
+      return "{ \"message\":\"Item with ID <" + pendingItem.getId()
+          + "> does not exist in database.\" }";
     } else {
       existingItem.setAmount(pendingItem.getAmount());
       existingItem.setName(pendingItem.getName());
