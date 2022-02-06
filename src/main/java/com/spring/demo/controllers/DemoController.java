@@ -1,6 +1,7 @@
 package com.spring.demo.controllers;
 
 import com.spring.demo.configs.ItemChannels;
+import com.spring.demo.configs.Message;
 import com.spring.demo.models.Item;
 import com.spring.demo.services.ItemGateway;
 import com.spring.demo.services.ItemServiceDiskImpl;
@@ -43,17 +44,17 @@ public class DemoController {
   }
 
   @PostMapping(path = "/item")
-  public String addNewItem(@RequestBody Item item) {
+  public Message addNewItem(@RequestBody Item item) {
     return itemGateway.addNewItem(ItemChannels.API_HEADER_VALUE_ADD_NEW_ITEM, item);
   }
 
   @PutMapping(path = "/item")
-  public String updateItemById(@RequestBody Item item) {
+  public Message updateItemById(@RequestBody Item item) {
     return itemGateway.updateItemById(ItemChannels.API_HEADER_VALUE_UPDATE_ITEM_BY_ID, item);
   }
 
   @DeleteMapping(path = "/item")
-  public String deleteItemById(@RequestParam String id) {
+  public Message deleteItemById(@RequestParam String id) {
     return itemGateway.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID, id);
   }
 

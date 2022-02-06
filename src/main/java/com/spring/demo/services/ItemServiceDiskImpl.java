@@ -38,39 +38,39 @@ public class ItemServiceDiskImpl implements ItemService {
   }
 
   @Override
-  public String addNewItem(Item incomingItem) {
+  public Message addNewItem(Item incomingItem) {
     if (itemDiskRepo.findItemByName(incomingItem.getName()).isEmpty()) {
       Item newItem = new Item(incomingItem.getAmount(), incomingItem.getName());
       itemDiskRepo.save(newItem);
-      return new Message("Successfully added item.").toString();
+      return new Message("Successfully added item.");
     } else {
       return new Message("Item with name <" + incomingItem.getName()
-          + "> already exists in database.").toString();
+          + "> already exists in database.");
     }
   }
 
   @Override
-  public String updateItemById(Item pendingItem) {
+  public Message updateItemById(Item pendingItem) {
     Item existingItem = getItemById(pendingItem.getId());
     if (existingItem == null) {
       return new Message("Item with ID <" + pendingItem.getId()
-          + "> does not exist in database.").toString();
+          + "> does not exist in database.");
     } else {
       existingItem.setAmount(pendingItem.getAmount());
       existingItem.setName(pendingItem.getName());
       itemDiskRepo.save(existingItem);
-      return new Message("Successfully updated item.").toString();
+      return new Message("Successfully updated item.");
     }
   }
 
   @Override
-  public String deleteItemById(String id) {
+  public Message deleteItemById(String id) {
     Item existingItem = getItemById(id);
     if (existingItem == null) {
-      return new Message("Item with ID <" + id + "> does not exist in database.").toString();
+      return new Message("Item with ID <" + id + "> does not exist in database.");
     } else {
       itemDiskRepo.deleteById(id);
-      return new Message("Successfully deleted item.").toString();
+      return new Message("Successfully deleted item.");
     }
   }
 

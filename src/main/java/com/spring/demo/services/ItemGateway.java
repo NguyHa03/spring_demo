@@ -1,6 +1,7 @@
 package com.spring.demo.services;
 
 import com.spring.demo.configs.ItemChannels;
+import com.spring.demo.configs.Message;
 import com.spring.demo.models.Item;
 import java.util.List;
 import org.springframework.integration.annotation.Gateway;
@@ -17,12 +18,12 @@ public interface ItemGateway {
   Item getItemById(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, String id);
 
   @Gateway(requestChannel = ItemChannels.INPUT_CHANNEL, replyChannel = ItemChannels.OUTPUT_CHANNEL)
-  String addNewItem(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, Item item);
+  Message addNewItem(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, Item item);
 
   @Gateway(requestChannel = ItemChannels.INPUT_CHANNEL, replyChannel = ItemChannels.OUTPUT_CHANNEL)
-  String updateItemById(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, Item item);
+  Message updateItemById(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, Item item);
 
   @Gateway(requestChannel = ItemChannels.INPUT_CHANNEL, replyChannel = ItemChannels.OUTPUT_CHANNEL)
-  String deleteItemById(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, String id);
+  Message deleteItemById(@Header(ItemChannels.API_HEADER_KEY) String apiHeaderValue, String id);
 
 }
