@@ -1,6 +1,6 @@
 package com.spring.demo.configs;
 
-public class Names {
+public class ItemChannels {
 
   public static final String INPUT_CHANNEL = "input.channel";
   public static final String OUTPUT_CHANNEL = "output.channel";

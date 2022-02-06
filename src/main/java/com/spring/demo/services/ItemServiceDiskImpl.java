@@ -1,8 +1,10 @@
 package com.spring.demo.services;
 
+import com.spring.demo.configs.Message;
 import com.spring.demo.models.Item;
 import com.spring.demo.repos.ItemDiskRepo;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class ItemServiceDiskImpl implements ItemService {
 
   @Override
   public List<Item> getItems(String id) {
-    if (id != null && !id.isEmpty() && !id.isBlank()) {
+    if (!StringUtils.isEmpty(id)) {
       return itemDiskRepo.searchForItems(id);
     } else {
       return itemDiskRepo.findAll(Sort.by("id").ascending());
@@ -40,10 +42,10 @@ public class ItemServiceDiskImpl implements ItemService {
     if (itemDiskRepo.findItemByName(incomingItem.getName()).isEmpty()) {
       Item newItem = new Item(incomingItem.getAmount(), incomingItem.getName());
       itemDiskRepo.save(newItem);
-      return "{ \"message\":\"Successfully added item.\" }";
+      return new Message("Successfully added item.").toString();
     } else {
-      return "{ \"message\":\"Item with name <" + incomingItem.getName()
-          + "> already exists in database.\" }";
+      return new Message("Item with name <" + incomingItem.getName()
+          + "> already exists in database.").toString();
     }
   }
 
@@ -51,13 +53,13 @@ public class ItemServiceDiskImpl implements ItemService {
   public String updateItemById(Item pendingItem) {
     Item existingItem = getItemById(pendingItem.getId());
     if (existingItem == null) {
-      return "{ \"message\":\"Item with ID <" + pendingItem.getId()
-          + "> does not exist in database.\" }";
+      return new Message("Item with ID <" + pendingItem.getId()
+          + "> does not exist in database.").toString();
     } else {
       existingItem.setAmount(pendingItem.getAmount());
       existingItem.setName(pendingItem.getName());
       itemDiskRepo.save(existingItem);
-      return "{ \"message\":\"Successfully updated item.\" }";
+      return new Message("Successfully updated item.").toString();
     }
   }
 
@@ -65,10 +67,10 @@ public class ItemServiceDiskImpl implements ItemService {
   public String deleteItemById(String id) {
     Item existingItem = getItemById(id);
     if (existingItem == null) {
-      return "{ \"message\":\"Item with ID <" + id + "> does not exist in database.\" }";
+      return new Message("Item with ID <" + id + "> does not exist in database.").toString();
     } else {
       itemDiskRepo.deleteById(id);
-      return "{ \"message\":\"Successfully deleted item.\" }";
+      return new Message("Successfully deleted item.").toString();
     }
   }
 

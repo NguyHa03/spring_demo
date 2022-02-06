@@ -1,10 +1,11 @@
 package com.spring.demo.controllers;
 
-import com.spring.demo.configs.Names;
+import com.spring.demo.configs.ItemChannels;
 import com.spring.demo.models.Item;
 import com.spring.demo.services.ItemGateway;
 import com.spring.demo.services.ItemServiceDiskImpl;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,30 +31,30 @@ public class DemoController {
 
   @GetMapping(path = "/items")
   public List<Item> getItems(@RequestParam(required = false) String id) {
-    if (id == null || id.isBlank() || id.isEmpty()) {
+    if (StringUtils.isEmpty(id)) {
       id = "";
     }
-    return itemGateway.getItems(Names.API_HEADER_VALUE_GET_ITEMS, id);
+    return itemGateway.getItems(ItemChannels.API_HEADER_VALUE_GET_ITEMS, id);
   }
 
   @GetMapping(path = "/item")
   public Item getItemById(@RequestParam String id) {
-    return itemGateway.getItemById(Names.API_HEADER_VALUE_GET_ITEM_BY_ID, id);
+    return itemGateway.getItemById(ItemChannels.API_HEADER_VALUE_GET_ITEM_BY_ID, id);
   }
 
   @PostMapping(path = "/item")
   public String addNewItem(@RequestBody Item item) {
-    return itemGateway.addNewItem(Names.API_HEADER_VALUE_ADD_NEW_ITEM, item);
+    return itemGateway.addNewItem(ItemChannels.API_HEADER_VALUE_ADD_NEW_ITEM, item);
   }
 
   @PutMapping(path = "/item")
   public String updateItemById(@RequestBody Item item) {
-    return itemGateway.updateItemById(Names.API_HEADER_VALUE_UPDATE_ITEM_BY_ID, item);
+    return itemGateway.updateItemById(ItemChannels.API_HEADER_VALUE_UPDATE_ITEM_BY_ID, item);
   }
 
   @DeleteMapping(path = "/item")
   public String deleteItemById(@RequestParam String id) {
-    return itemGateway.deleteItemById(Names.API_HEADER_VALUE_DELETE_ITEM_BY_ID, id);
+    return itemGateway.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID, id);
   }
 
 }
