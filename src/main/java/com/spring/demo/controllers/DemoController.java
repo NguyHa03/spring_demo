@@ -32,8 +32,8 @@ public class DemoController {
 
   @GetMapping(path = "/items")
   public List<Item> getItems(@RequestParam(required = false) String id) {
-    id = StringUtils.defaultString(id);
-    return itemGateway.getItems(ItemChannels.API_HEADER_VALUE_GET_ITEMS, id);
+    return itemGateway.getItems(ItemChannels.API_HEADER_VALUE_GET_ITEMS,
+        StringUtils.defaultString(id));
   }
 
   @GetMapping(path = "/item")
