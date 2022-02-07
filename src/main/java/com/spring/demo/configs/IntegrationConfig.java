@@ -1,7 +1,7 @@
 package com.spring.demo.configs;
 
 import com.spring.demo.models.Item;
-import com.spring.demo.services.ItemServiceDiskImpl;
+import com.spring.demo.services.ItemService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,13 @@ public class IntegrationConfig {
   public static final String NONEXISTENT_ITEM_ID = "unreal";
   public static final int NONEXISTENT_ITEM_AMOUNT = -1;
   public static final String NONEXISTENT_ITEM_NAME = "The item you are looking for does not exist";
-  private final ItemServiceDiskImpl itemServiceDisk;
+  private final ItemService itemService;
   private final LoggingServiceActivator loggingServiceActivator;
 
   @Autowired
-  public IntegrationConfig(ItemServiceDiskImpl itemServiceDisk,
+  public IntegrationConfig(ItemService itemService,
       LoggingServiceActivator loggingServiceActivator) {
-    this.itemServiceDisk = itemServiceDisk;
+    this.itemService = itemService;
     this.loggingServiceActivator = loggingServiceActivator;
   }
 
@@ -112,7 +112,7 @@ public class IntegrationConfig {
   public Message<List<Item>> getItemsServiceActivator(Message<String> request)
       throws MessagingException {
     return MessageBuilder
-        .withPayload(itemServiceDisk.getItems(request.getPayload()))
+        .withPayload(itemService.getItems(request.getPayload()))
         .copyHeaders(request.getHeaders())
         .build();
   }
@@ -121,7 +121,7 @@ public class IntegrationConfig {
   public Message<Item> getItemByIdServiceActivator(Message<String> request)
       throws MessagingException {
 
-    Item searchResult = itemServiceDisk.getItemById(request.getPayload());
+    Item searchResult = itemService.getItemById(request.getPayload());
 
     return MessageBuilder
         .withPayload(Objects.requireNonNullElseGet(searchResult, () -> new Item(
@@ -138,7 +138,7 @@ public class IntegrationConfig {
   public Message<com.spring.demo.configs.Message> addNewItemServiceActivator(Message<Item> request)
       throws MessagingException {
     return MessageBuilder
-        .withPayload(itemServiceDisk.addNewItem(request.getPayload()))
+        .withPayload(itemService.addNewItem(request.getPayload()))
         .copyHeaders(request.getHeaders())
         .build();
   }
@@ -148,7 +148,7 @@ public class IntegrationConfig {
       Message<Item> request)
       throws MessagingException {
     return MessageBuilder
-        .withPayload(itemServiceDisk.updateItemById(request.getPayload()))
+        .withPayload(itemService.updateItemById(request.getPayload()))
         .copyHeaders(request.getHeaders())
         .build();
   }
@@ -158,7 +158,7 @@ public class IntegrationConfig {
       Message<String> request)
       throws MessagingException {
     return MessageBuilder
-        .withPayload(itemServiceDisk.deleteItemById(request.getPayload()))
+        .withPayload(itemService.deleteItemById(request.getPayload()))
         .copyHeaders(request.getHeaders())
         .build();
   }

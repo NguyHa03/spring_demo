@@ -4,7 +4,6 @@ import com.spring.demo.configs.ItemChannels;
 import com.spring.demo.configs.Message;
 import com.spring.demo.models.Item;
 import com.spring.demo.services.ItemGateway;
-import com.spring.demo.services.ItemServiceDiskImpl;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class DemoController {
   private final ItemGateway itemGateway;
 
   @Autowired
-  public DemoController(ItemServiceDiskImpl itemServiceDisk, ItemGateway itemGateway) {
+  public DemoController(ItemGateway itemGateway) {
     this.itemGateway = itemGateway;
   }
 
