@@ -32,9 +32,7 @@ public class DemoController {
 
   @GetMapping(path = "/items")
   public List<Item> getItems(@RequestParam(required = false) String id) {
-    if (StringUtils.isEmpty(id)) {
-      id = "";
-    }
+    id = StringUtils.defaultString(id);
     return itemGateway.getItems(ItemChannels.API_HEADER_VALUE_GET_ITEMS, id);
   }
 

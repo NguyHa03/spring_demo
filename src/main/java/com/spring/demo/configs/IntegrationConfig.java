@@ -25,6 +25,9 @@ import org.springframework.messaging.MessagingException;
 @IntegrationComponentScan
 public class IntegrationConfig {
 
+  public static final String NONEXISTENT_ITEM_ID = "unreal";
+  public static final int NONEXISTENT_ITEM_AMOUNT = -1;
+  public static final String NONEXISTENT_ITEM_NAME = "The item you are looking for does not exist";
   private final ItemServiceDiskImpl itemServiceDisk;
   private final LoggingServiceActivator loggingServiceActivator;
 
@@ -122,9 +125,9 @@ public class IntegrationConfig {
 
     return MessageBuilder
         .withPayload(Objects.requireNonNullElseGet(searchResult, () -> new Item(
-            "unreal",
-            -1,
-            "The item you are looking for does not exist"
+            NONEXISTENT_ITEM_ID,
+            NONEXISTENT_ITEM_AMOUNT,
+            NONEXISTENT_ITEM_NAME
         )))
         .copyHeaders(request.getHeaders())
         .build();
