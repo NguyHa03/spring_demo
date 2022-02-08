@@ -135,7 +135,7 @@ public class IntegrationConfig {
   }
 
   @ServiceActivator(inputChannel = ItemChannels.ADD_NEW_ITEM_CHANNEL)
-  public Message<com.spring.demo.configs.Message> addNewItemServiceActivator(Message<Item> request)
+  public Message<ApiResponseMessage> addNewItemServiceActivator(Message<Item> request)
       throws MessagingException {
     return MessageBuilder
         .withPayload(itemService.addNewItem(request.getPayload()))
@@ -144,7 +144,7 @@ public class IntegrationConfig {
   }
 
   @ServiceActivator(inputChannel = ItemChannels.UPDATE_ITEM_BY_ID_CHANNEL)
-  public Message<com.spring.demo.configs.Message> updateItemByIdServiceActivator(
+  public Message<ApiResponseMessage> updateItemByIdServiceActivator(
       Message<Item> request)
       throws MessagingException {
     return MessageBuilder
@@ -154,7 +154,7 @@ public class IntegrationConfig {
   }
 
   @ServiceActivator(inputChannel = ItemChannels.DELETE_ITEM_BY_ID_CHANNEL)
-  public Message<com.spring.demo.configs.Message> deleteItemByIdServiceActivator(
+  public Message<ApiResponseMessage> deleteItemByIdServiceActivator(
       Message<String> request)
       throws MessagingException {
     return MessageBuilder

@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Message {
+public class ApiResponseMessage {
 
   private String message;
 
