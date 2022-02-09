@@ -23,27 +23,25 @@ import org.springframework.data.domain.Sort;
 @ExtendWith({MockitoExtension.class})
 class ItemServiceDiskImplTest {
 
-  public static final String FAKE_ITEM_ID = "fake id";
-  public static final String FAKE_ITEM_ID_EMPTY = "";
-  public static final int FAKE_ITEM_AMOUNT = -1;
-  public static final String FAKE_ITEM_NAME = "fake name";
+  public static final String DUMMY_ITEM_ID = "dummy id";
+  public static final String DUMMY_ITEM_ID_EMPTY = "";
   public static final Sort SORT_BY_ID_ASCENDING = Sort.by("id").ascending();
 
   // this is the Object Under Test (OUT), which is a real object and not a mock object.
   // @InjectMocks lets Mockito know that we want to inject mock objects into it.
   @InjectMocks
-  private ItemServiceDiskImpl itemServiceDiskOUT;
+  private ItemServiceDiskImpl itemServiceDiskObjectUnderTest;
 
   // these are mock objects (or dependencies). not real. used for testing only.
   // we need to mock the OUT's dependencies to maintain atomicity in our tests.
   @Mock
   private ItemDiskRepo itemDiskRepoMockObject;
   @Mock
-  private Item itemMockObject = new Item(FAKE_ITEM_ID, FAKE_ITEM_AMOUNT, FAKE_ITEM_NAME);
+  private Item itemMockObject;
   @Mock
-  private List<Item> itemListMockObject = List.of(itemMockObject);
+  private List<Item> itemListMockObject;
   @Mock
-  private Item incomingItemMockObject;
+  private Item newItemMockObject;
   @Mock
   private Optional<Item> existingItemMockObject;
 
@@ -58,93 +56,93 @@ class ItemServiceDiskImplTest {
   private ArgumentCaptor<Sort> findAllArgumentCaptor;
 
   @Test
-  void getItemsShouldSearchForItemsIfItemIdNotEmpty() {
+  public void getItemsShouldSearchForItemsIfItemIdNotEmpty() {
 
-    when(itemDiskRepoMockObject.searchForItems(FAKE_ITEM_ID)).thenReturn(itemListMockObject);
+    when(itemDiskRepoMockObject.searchForItems(DUMMY_ITEM_ID)).thenReturn(itemListMockObject);
 
-    List<Item> methodUnderTestOutput = itemServiceDiskOUT.getItems(FAKE_ITEM_ID);
+    List<Item> actualItemList = itemServiceDiskObjectUnderTest.getItems(DUMMY_ITEM_ID);
 
     verify(itemDiskRepoMockObject).searchForItems(itemIdArgumentCaptor.capture());
 
-    String capturedArgument = itemIdArgumentCaptor.getValue();
-    assertThat(capturedArgument).isEqualTo(FAKE_ITEM_ID);
+    String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
+    assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID);
 
-    assertThat(methodUnderTestOutput).isEqualTo(itemListMockObject);
+    assertThat(actualItemList).isEqualTo(itemListMockObject);
 
   }
 
   @Test
-  void getItemsShouldFindAllSortByIdAscendingIfItemIdEmpty() {
+  public void getItemsShouldFindAllSortByIdAscendingIfItemIdEmpty() {
 
     when(itemDiskRepoMockObject.findAll(SORT_BY_ID_ASCENDING)).thenReturn(itemListMockObject);
 
-    List<Item> methodUnderTestOutput = itemServiceDiskOUT.getItems(FAKE_ITEM_ID_EMPTY);
+    List<Item> actualItemList = itemServiceDiskObjectUnderTest.getItems(DUMMY_ITEM_ID_EMPTY);
 
     verify(itemDiskRepoMockObject).findAll(findAllArgumentCaptor.capture());
 
-    Sort capturedArgument = findAllArgumentCaptor.getValue();
-    assertThat(capturedArgument).isEqualTo(SORT_BY_ID_ASCENDING);
+    Sort findAllArgumentCaptorValue = findAllArgumentCaptor.getValue();
+    assertThat(findAllArgumentCaptorValue).isEqualTo(SORT_BY_ID_ASCENDING);
 
-    assertThat(methodUnderTestOutput).isEqualTo(itemListMockObject);
+    assertThat(actualItemList).isEqualTo(itemListMockObject);
 
   }
 
   @Test
-  void getItemByIdShouldReturnItemIfIdNotNullAndItemFound() {
+  public void getItemByIdShouldReturnItemIfIdNotNullAndItemFound() {
 
-    when(itemDiskRepoMockObject.findById(FAKE_ITEM_ID)).thenReturn(
-        Optional.ofNullable(itemMockObject));
+    when(itemDiskRepoMockObject.findById(DUMMY_ITEM_ID)).thenReturn(
+        Optional.of(itemMockObject));
 
-    Item methodUnderTestOutput = itemServiceDiskOUT.getItemById(FAKE_ITEM_ID);
+    Item actualItem = itemServiceDiskObjectUnderTest.getItemById(DUMMY_ITEM_ID);
 
     verify(itemDiskRepoMockObject).findById(itemIdArgumentCaptor.capture());
 
-    String capturedArgument = itemIdArgumentCaptor.getValue();
-    assertThat(capturedArgument).isEqualTo(FAKE_ITEM_ID);
+    String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
+    assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID);
 
-    assertThat(methodUnderTestOutput).isEqualTo(itemMockObject);
+    assertThat(actualItem).isEqualTo(itemMockObject);
 
   }
 
   @Test
-  void getItemByIdShouldReturnNullIfIdNotNullAndItemNotFound() {
+  public void getItemByIdShouldReturnNullIfIdNotNullAndItemNotFound() {
 
-    when(itemDiskRepoMockObject.findById(FAKE_ITEM_ID)).thenReturn(Optional.empty());
+    when(itemDiskRepoMockObject.findById(DUMMY_ITEM_ID)).thenReturn(Optional.empty());
 
-    Item methodUnderTestOutput = itemServiceDiskOUT.getItemById(FAKE_ITEM_ID);
+    Item actualItem = itemServiceDiskObjectUnderTest.getItemById(DUMMY_ITEM_ID);
 
     verify(itemDiskRepoMockObject).findById(itemIdArgumentCaptor.capture());
 
-    String capturedArgument = itemIdArgumentCaptor.getValue();
-    assertThat(capturedArgument).isEqualTo(FAKE_ITEM_ID);
+    String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
+    assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID);
 
-    assertThat(methodUnderTestOutput).isNull();
+    assertThat(actualItem).isNull();
 
   }
 
   @Test
-  void getItemByIdShouldReturnNullIfIdNull() {
+  public void getItemByIdShouldReturnNullIfIdNull() {
 
-    Item methodUnderTestOutput = itemServiceDiskOUT.getItemById(null);
+    Item actualItem = itemServiceDiskObjectUnderTest.getItemById(null);
 
-    assertThat(methodUnderTestOutput).isNull();
+    assertThat(actualItem).isNull();
 
   }
 
   // long method name, but hopefully it's clear.
   @Test
-  void addNewItemShouldSaveNewItemAndReturnConfirmationMessageWhenNewItemNameNotFoundInDatabase() {
+  public void addNewItemShouldSaveNewItemThenReturnConfirmationMessageWhenNewItemNameNotFoundInDatabase() {
 
     // specifying our mock objects' expected behaviors & outputs.
-    when(itemDiskRepoMockObject.findItemByName(incomingItemMockObject.getName())).thenReturn(
+    when(itemDiskRepoMockObject.findItemByName(newItemMockObject.getName())).thenReturn(
         existingItemMockObject);
     when(existingItemMockObject.isEmpty()).thenReturn(true);
 
     // invoking the Method Under Test (MUT),...
     // ...then use a ApiResponseMessage object to carry its output.
     // in other words, this is where we run the test.
-    ApiResponseMessage methodUnderTestOutput = itemServiceDiskOUT.addNewItem(
-        incomingItemMockObject);
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.addNewItem(
+        newItemMockObject);
 
     // now we compare our actual behaviors/outputs against our expected behaviors/outputs.
 
@@ -156,28 +154,86 @@ class ItemServiceDiskImplTest {
     verify(itemDiskRepoMockObject).save(itemArgumentCaptor.capture());
 
     // comparing the captured (actual) input argument against the expected input argument.
-    Item capturedArgument = itemArgumentCaptor.getValue();
-    assertThat(capturedArgument.getAmount()).isEqualTo(incomingItemMockObject.getAmount());
-    assertThat(capturedArgument.getName()).isEqualTo(incomingItemMockObject.getName());
+    Item itemArgumentCaptorValue = itemArgumentCaptor.getValue();
+    assertThat(itemArgumentCaptorValue.getAmount()).isEqualTo(newItemMockObject.getAmount());
+    assertThat(itemArgumentCaptorValue.getName()).isEqualTo(newItemMockObject.getName());
 
     // comparing the value of the MUT's output (actual output) against our expected output.
-    assertThat(methodUnderTestOutput.getMessage()).isEqualTo("Successfully added item.");
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo("Successfully added item.");
 
   }
 
   @Test
-  void addNewItemShouldReturnErrorMessageWhenNewItemNameFoundInDatabase() {
+  public void addNewItemShouldReturnErrorMessageWhenNewItemNameFoundInDatabase() {
 
-    when(itemDiskRepoMockObject.findItemByName(incomingItemMockObject.getName())).thenReturn(
+    when(itemDiskRepoMockObject.findItemByName(newItemMockObject.getName())).thenReturn(
         existingItemMockObject);
     when(existingItemMockObject.isEmpty()).thenReturn(false);
 
-    ApiResponseMessage methodUnderTestOutput = itemServiceDiskOUT.addNewItem(
-        incomingItemMockObject);
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.addNewItem(
+        newItemMockObject);
 
-    assertThat(methodUnderTestOutput.getMessage()).isEqualTo(
-        "Item with name <" + incomingItemMockObject.getName()
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo(
+        "Item with name <" + newItemMockObject.getName()
             + "> already exists in database.");
+
+  }
+
+  @Test
+  public void updateItemByIdShouldReturnErrorMessageWhenItemNotFoundInDatabase() {
+
+    when(itemMockObject.getId()).thenReturn(DUMMY_ITEM_ID);
+    when(itemDiskRepoMockObject.findById(itemMockObject.getId())).thenReturn(Optional.empty());
+
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.updateItemById(
+        itemMockObject);
+
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo(
+        "Item with ID <" + itemMockObject.getId()
+            + "> does not exist in database.");
+  }
+
+  @Test
+  public void updateItemByIdShouldUpdateItemThenReturnConfirmationMessageWhenItemFoundInDatabase() {
+
+    when(itemMockObject.getId()).thenReturn(DUMMY_ITEM_ID);
+    when(itemDiskRepoMockObject.findById(itemMockObject.getId())).thenReturn(
+        Optional.of(itemMockObject));
+
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.updateItemById(
+        itemMockObject);
+
+    verify(itemMockObject).setAmount(itemMockObject.getAmount());
+    verify(itemMockObject).setName(itemMockObject.getName());
+    verify(itemDiskRepoMockObject).save(itemMockObject);
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo("Successfully updated item.");
+
+  }
+
+  @Test
+  public void deleteItemByIdShouldReturnErrorMessageWhenItemNotFoundInDatabase() {
+
+    when(itemDiskRepoMockObject.findById(DUMMY_ITEM_ID)).thenReturn(Optional.empty());
+
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.deleteItemById(
+        DUMMY_ITEM_ID);
+
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo(
+        "Item with ID <" + DUMMY_ITEM_ID + "> does not exist in database.");
+
+  }
+
+  @Test
+  public void deleteItemByIdShouldDeleteItemAndReturnConfirmationMessageWhenItemFoundInDatabase() {
+
+    when(itemDiskRepoMockObject.findById(DUMMY_ITEM_ID)).thenReturn(Optional.of(itemMockObject));
+
+    ApiResponseMessage actualApiResponseMessage = itemServiceDiskObjectUnderTest.deleteItemById(
+        DUMMY_ITEM_ID);
+
+    verify(itemDiskRepoMockObject).deleteById(DUMMY_ITEM_ID);
+
+    assertThat(actualApiResponseMessage.getMessage()).isEqualTo("Successfully deleted item.");
 
   }
 
