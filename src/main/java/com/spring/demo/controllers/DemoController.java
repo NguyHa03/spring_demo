@@ -53,7 +53,8 @@ public class DemoController {
 
   @DeleteMapping(path = "/item")
   public ApiResponseMessage deleteItemById(@RequestParam String id) {
-    return itemGateway.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID, id);
+    return itemGateway.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID,
+        StringUtils.defaultString(id));
   }
 
 }

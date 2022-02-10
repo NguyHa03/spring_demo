@@ -176,7 +176,7 @@ class DemoControllerTest {
   }
 
   @Test
-  public void deleteItemByIdShouldReturnApiResponseMessage() {
+  public void deleteItemByIdShouldReturnApiResponseMessageWhenItemIdNotNull() {
 
     when(itemGatewayMockObject.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID,
         DUMMY_ITEM_ID)).thenReturn(apiResponseMessageMockObject);
@@ -193,6 +193,29 @@ class DemoControllerTest {
 
     String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
     assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID);
+
+    assertThat(actualApiResponseMessage).isEqualTo(apiResponseMessageMockObject);
+
+  }
+
+  @Test
+  public void deleteItemByIdShouldReturnApiResponseMessageWhenItemIdNull() {
+
+    when(itemGatewayMockObject.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID,
+        DUMMY_ITEM_ID_EMPTY)).thenReturn(apiResponseMessageMockObject);
+
+    ApiResponseMessage actualApiResponseMessage = demoControllerObjectUnderTest.deleteItemById(
+        null);
+
+    verify(itemGatewayMockObject).deleteItemById(itemChannelsArgumentCaptor.capture(),
+        itemIdArgumentCaptor.capture());
+
+    String itemChannelsArgumentCaptorValue = itemChannelsArgumentCaptor.getValue();
+    assertThat(itemChannelsArgumentCaptorValue).isEqualTo(
+        ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID);
+
+    String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
+    assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID_EMPTY);
 
     assertThat(actualApiResponseMessage).isEqualTo(apiResponseMessageMockObject);
 
