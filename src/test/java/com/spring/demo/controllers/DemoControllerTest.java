@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.spring.demo.configs.ApiResponseMessage;
 import com.spring.demo.configs.ItemChannels;
 import com.spring.demo.models.Item;
 import com.spring.demo.services.ItemGateway;
@@ -31,11 +32,16 @@ class DemoControllerTest {
   private List<Item> itemListMockObject;
   @Mock
   private Item itemMockObject;
+  @Mock
+  private ApiResponseMessage apiResponseMessageMockObject;
+
 
   @Captor
   private ArgumentCaptor<String> itemChannelsArgumentCaptor;
   @Captor
   private ArgumentCaptor<String> itemIdArgumentCaptor;
+  @Captor
+  private ArgumentCaptor<Item> itemArgumentCaptor;
 
   @Test
   public void getItemsShouldReturnItemListWhenItemIdNotNull() {
@@ -120,6 +126,75 @@ class DemoControllerTest {
     assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID_EMPTY);
 
     assertThat(actualItem).isEqualTo(itemMockObject);
+
+  }
+
+  @Test
+  public void addNewItemShouldReturnApiResponseMessage() {
+
+    when(itemGatewayMockObject.addNewItem(ItemChannels.API_HEADER_VALUE_ADD_NEW_ITEM,
+        itemMockObject)).thenReturn(apiResponseMessageMockObject);
+
+    ApiResponseMessage actualApiResponseMessage = demoControllerObjectUnderTest.addNewItem(
+        itemMockObject);
+
+    verify(itemGatewayMockObject).addNewItem(itemChannelsArgumentCaptor.capture(),
+        itemArgumentCaptor.capture());
+
+    String itemChannelsArgumentCaptorValue = itemChannelsArgumentCaptor.getValue();
+    assertThat(itemChannelsArgumentCaptorValue).isEqualTo(
+        ItemChannels.API_HEADER_VALUE_ADD_NEW_ITEM);
+
+    Item itemArgumentCaptorValue = itemArgumentCaptor.getValue();
+    assertThat(itemArgumentCaptorValue).isEqualTo(itemMockObject);
+
+    assertThat(actualApiResponseMessage).isEqualTo(apiResponseMessageMockObject);
+
+  }
+
+  @Test
+  public void updateItemByIdShouldReturnApiResponseMessage() {
+
+    when(itemGatewayMockObject.updateItemById(ItemChannels.API_HEADER_VALUE_UPDATE_ITEM_BY_ID,
+        itemMockObject)).thenReturn(apiResponseMessageMockObject);
+
+    ApiResponseMessage actualApiResponseMessage = demoControllerObjectUnderTest.updateItemById(
+        itemMockObject);
+
+    verify(itemGatewayMockObject).updateItemById(itemChannelsArgumentCaptor.capture(),
+        itemArgumentCaptor.capture());
+
+    String itemChannelsArgumentCaptorValue = itemChannelsArgumentCaptor.getValue();
+    assertThat(itemChannelsArgumentCaptorValue).isEqualTo(
+        ItemChannels.API_HEADER_VALUE_UPDATE_ITEM_BY_ID);
+
+    Item itemArgumentCaptorValue = itemArgumentCaptor.getValue();
+    assertThat(itemArgumentCaptorValue).isEqualTo(itemMockObject);
+
+    assertThat(actualApiResponseMessage).isEqualTo(apiResponseMessageMockObject);
+
+  }
+
+  @Test
+  public void deleteItemByIdShouldReturnApiResponseMessage() {
+
+    when(itemGatewayMockObject.deleteItemById(ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID,
+        DUMMY_ITEM_ID)).thenReturn(apiResponseMessageMockObject);
+
+    ApiResponseMessage actualApiResponseMessage = demoControllerObjectUnderTest.deleteItemById(
+        DUMMY_ITEM_ID);
+
+    verify(itemGatewayMockObject).deleteItemById(itemChannelsArgumentCaptor.capture(),
+        itemIdArgumentCaptor.capture());
+
+    String itemChannelsArgumentCaptorValue = itemChannelsArgumentCaptor.getValue();
+    assertThat(itemChannelsArgumentCaptorValue).isEqualTo(
+        ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID);
+
+    String itemIdArgumentCaptorValue = itemIdArgumentCaptor.getValue();
+    assertThat(itemIdArgumentCaptorValue).isEqualTo(DUMMY_ITEM_ID);
+
+    assertThat(actualApiResponseMessage).isEqualTo(apiResponseMessageMockObject);
 
   }
 
