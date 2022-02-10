@@ -37,7 +37,8 @@ public class DemoController {
 
   @GetMapping(path = "/item")
   public Item getItemById(@RequestParam String id) {
-    return itemGateway.getItemById(ItemChannels.API_HEADER_VALUE_GET_ITEM_BY_ID, id);
+    return itemGateway.getItemById(ItemChannels.API_HEADER_VALUE_GET_ITEM_BY_ID,
+        StringUtils.defaultString(id));
   }
 
   @PostMapping(path = "/item")
