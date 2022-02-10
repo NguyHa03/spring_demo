@@ -22,7 +22,7 @@ class LoggingServiceActivatorTest {
   private Message<Object> request;
 
   @Test
-  void loggerShouldReturnMessageObject() {
+  public void loggerShouldReturnMessageObject() {
     MessageHeaders messageHeaders = new MessageHeaders(Map.of(KEY, VALUE));
     when(request.getPayload()).thenReturn(DATA);
     when(request.getHeaders()).thenReturn(messageHeaders);

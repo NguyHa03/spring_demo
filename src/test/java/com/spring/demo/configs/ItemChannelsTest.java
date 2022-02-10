@@ -12,7 +12,7 @@ class ItemChannelsTest {
   ItemChannels itemChannels = new ItemChannels();
 
   @Test
-  void itemChannelsValuesShouldMatch() {
+  public void itemChannelsValuesShouldMatch() {
     assertThat(itemChannels.INPUT_CHANNEL).isEqualTo("input.channel");
     assertThat(itemChannels.OUTPUT_CHANNEL).isEqualTo("output.channel");
     assertThat(itemChannels.ITEM_ROUTER_CHANNEL).isEqualTo("item.router.channel");
