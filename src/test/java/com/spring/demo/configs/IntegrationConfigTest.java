@@ -1,7 +1,9 @@
 package com.spring.demo.configs;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.integration.channel.DirectChannel;
@@ -25,6 +28,7 @@ import org.springframework.integration.dsl.IntegrationFlowBuilder;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
+import org.springframework.integration.router.HeaderValueRouter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
@@ -66,7 +70,9 @@ class IntegrationConfigTest {
   private ApiResponseMessage apiResponseMessageMockObject;
 
   @Captor
-  private ArgumentCaptor<String> stringArgumentCaptor;
+  private ArgumentCaptor<String> stringArgumentCaptor0;
+  @Captor
+  private ArgumentCaptor<String> stringArgumentCaptor1;
   @Captor
   private ArgumentCaptor<Item> itemArgumentCaptor;
 
@@ -201,6 +207,37 @@ class IntegrationConfigTest {
 //  }
 
   @Test
+  public void itemRouterShouldReturnHeaderValueRouter() {
+
+    try (MockedConstruction<HeaderValueRouter> mocked = mockConstruction(HeaderValueRouter.class)) {
+
+      HeaderValueRouter actualHeaderValueRouter = integrationConfigObjectUnderTest.itemRouter();
+
+      verify(actualHeaderValueRouter, times(5)).setChannelMapping(
+          stringArgumentCaptor0.capture(),
+          stringArgumentCaptor1.capture());
+      assertThat(stringArgumentCaptor0.getAllValues()).isEqualTo(List.of(
+          ItemChannels.API_HEADER_VALUE_GET_ITEMS,
+          ItemChannels.API_HEADER_VALUE_GET_ITEM_BY_ID,
+          ItemChannels.API_HEADER_VALUE_ADD_NEW_ITEM,
+          ItemChannels.API_HEADER_VALUE_UPDATE_ITEM_BY_ID,
+          ItemChannels.API_HEADER_VALUE_DELETE_ITEM_BY_ID
+      ));
+      assertThat(stringArgumentCaptor1.getAllValues()).isEqualTo(List.of(
+          ItemChannels.GET_ITEMS_CHANNEL,
+          ItemChannels.GET_ITEM_BY_ID_CHANNEL,
+          ItemChannels.ADD_NEW_ITEM_CHANNEL,
+          ItemChannels.UPDATE_ITEM_BY_ID_CHANNEL,
+          ItemChannels.DELETE_ITEM_BY_ID_CHANNEL
+      ));
+
+      assertThat(actualHeaderValueRouter).isInstanceOf(HeaderValueRouter.class);
+
+    }
+
+  }
+
+  @Test
   public void getItemsServiceActivatorShouldReturnItemListMessage() {
     MessageHeaders messageHeaders = new MessageHeaders(
         Map.of(DUMMY_HEADER_KEY, DUMMY_HEADER_VALUE));
@@ -212,8 +249,8 @@ class IntegrationConfigTest {
     Message<List<Item>> actualItemListMessage = integrationConfigObjectUnderTest.getItemsServiceActivator(
         stringMessageMockObject);
 
-    verify(itemServiceMockObject).getItems(stringArgumentCaptor.capture());
-    assertThat(stringArgumentCaptor.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
+    verify(itemServiceMockObject).getItems(stringArgumentCaptor0.capture());
+    assertThat(stringArgumentCaptor0.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
 
     assertThat(actualItemListMessage.getPayload()).isEqualTo(itemListMockObject);
     assertThat(actualItemListMessage.getHeaders().containsKey(DUMMY_HEADER_KEY)).isTrue();
@@ -231,8 +268,8 @@ class IntegrationConfigTest {
     Message<Item> actualItemMessage = integrationConfigObjectUnderTest.getItemByIdServiceActivator(
         stringMessageMockObject);
 
-    verify(itemServiceMockObject).getItemById(stringArgumentCaptor.capture());
-    assertThat(stringArgumentCaptor.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
+    verify(itemServiceMockObject).getItemById(stringArgumentCaptor0.capture());
+    assertThat(stringArgumentCaptor0.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
 
     assertThat(actualItemMessage.getPayload()).isEqualTo(itemMockObject);
     assertThat(actualItemMessage.getHeaders().containsKey(DUMMY_HEADER_KEY)).isTrue();
@@ -249,8 +286,8 @@ class IntegrationConfigTest {
     Message<Item> actualItemMessage = integrationConfigObjectUnderTest.getItemByIdServiceActivator(
         stringMessageMockObject);
 
-    verify(itemServiceMockObject).getItemById(stringArgumentCaptor.capture());
-    assertThat(stringArgumentCaptor.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
+    verify(itemServiceMockObject).getItemById(stringArgumentCaptor0.capture());
+    assertThat(stringArgumentCaptor0.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
 
     Item nonexistentItem = new Item(
         IntegrationConfig.NONEXISTENT_ITEM_ID,
@@ -316,8 +353,8 @@ class IntegrationConfigTest {
     Message<ApiResponseMessage> actualApiResponseMessageMessage = integrationConfigObjectUnderTest.deleteItemByIdServiceActivator(
         stringMessageMockObject);
 
-    verify(itemServiceMockObject).deleteItemById(stringArgumentCaptor.capture());
-    assertThat(stringArgumentCaptor.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
+    verify(itemServiceMockObject).deleteItemById(stringArgumentCaptor0.capture());
+    assertThat(stringArgumentCaptor0.getValue()).isEqualTo(DUMMY_STRING_PAYLOAD);
 
     assertThat(actualApiResponseMessageMessage.getPayload()).isEqualTo(
         apiResponseMessageMockObject);
