@@ -1,6 +1,6 @@
 package com.spring.demo.services;
 
-import com.spring.demo.configs.Message;
+import com.spring.demo.configs.ApiResponseMessage;
 import com.spring.demo.models.Item;
 import java.util.List;
 
@@ -10,10 +10,10 @@ public interface ItemService {
 
   Item getItemById(String id);
 
-  Message addNewItem(Item item);
+  ApiResponseMessage addNewItem(Item item);
 
-  Message updateItemById(Item item);
+  ApiResponseMessage updateItemById(Item item);
 
-  Message deleteItemById(String id);
+  ApiResponseMessage deleteItemById(String id);
 
 }
