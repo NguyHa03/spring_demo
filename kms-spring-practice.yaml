@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kms-spring-practice-deployment
+  namespace: default
+  labels:
+    app: kms-spring-practice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kms-spring-practice
+  template:
+    metadata:
+      labels:
+        app: kms-spring-practice
+    spec:
+      containers:
+        - name: kms-spring-practice
+          image: ngoctthoang/kms-spring-practice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kms-spring-practice-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: kms-spring-practice
+  ports:
+    - port: 9090
+      targetPort: 9090
+      nodePort: 30001
