@@ -18,17 +18,5 @@ spec:
       containers:
         - name: kms-spring-practice
           image: ngoctthoang/kms-spring-practice
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kms-spring-practice-entrypoint
-  namespace: default
-spec:
-  type: NodePort
-  selector:
-    app: kms-spring-practice
-  ports:
-    - port: 9090
-      targetPort: 9090
-      nodePort: 30001
+      imagePullSecrets:
+        - name: secret
