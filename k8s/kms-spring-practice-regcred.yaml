@@ -4,7 +4,7 @@ data:
 kind: Secret
 metadata:
   creationTimestamp: "2022-02-14T10:01:55Z"
-  name: secret
+  name: kms-spring-practice-regcred
   namespace: default
   resourceVersion: "48399"
   uid: 9e6b5670-7f34-4f8a-a5c7-9e3eea5cca1b

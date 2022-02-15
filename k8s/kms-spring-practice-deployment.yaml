@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kms-spring-practice-deployment
+  namespace: default
+  labels:
+    app: kms-spring-practice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kms-spring-practice
+  template:
+    metadata:
+      labels:
+        app: kms-spring-practice
+    spec:
+      containers:
+        - name: kms-spring-practice
+          image: ngoctthoang/kms-spring-practice
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: springAppName
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: serverPort
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: dbUrl
+            - name: SPRING_DATASOURCE_DRIVERCLASSNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: dbDriver
+            - name: SPRING_JPA_DATABASE-PLATFORM
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: dbPlatform
+            - name: SPRING_H2_CONSOLE_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: h2ConsoleEnabled
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: kms-spring-practice-configmap
+                  key: ddlAuto
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kms-spring-practice-secrets
+                  key: dbUsername
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kms-spring-practice-secrets
+                  key: dbPassword
+      imagePullSecrets:
+        - name: kms-spring-practice-regcred
