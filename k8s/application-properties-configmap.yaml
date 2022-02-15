@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  application.properties: "# human-readable name for the application\r\nspring.application.name=KMS
+    - Spring Practice Application\r\n\r\n# specify the port\r\nserver.port=9090\r\n\r\n#
+    URL of our database\r\nspring.datasource.url=jdbc:h2:mem:testdb\r\n\r\n# driver
+    library of our database\r\nspring.datasource.driverClassName=org.h2.Driver\r\n\r\n#
+    username of our database\r\nspring.datasource.username=username\r\n\r\n# password
+    of our database\r\nspring.datasource.password=password\r\n\r\n# dialect of our
+    database\r\nspring.jpa.database-platform=org.hibernate.dialect.H2Dialect\r\n\r\n#
+    this lets us browse the database from the browser using a GUI\r\nspring.h2.console.enabled=true\r\n\r\n#
+    if our database is non-volatile, create-drop will erase everything in our database
+    and replace it with this app's dummy data\r\n# if you don't want that, change
+    it to your desired mode.\r\n# Hibernate ddl auto (create, create-drop, validate,
+    update)\r\nspring.jpa.hibernate.ddl-auto=create-drop\r\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2022-02-15T09:05:17Z"
+  name: application-properties-configmap
+  namespace: default
+  resourceVersion: "88963"
+  uid: 796ca3f8-dcfd-443a-a549-01840d671c5f
