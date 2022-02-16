@@ -2,7 +2,10 @@ name: kms-spring-practice
 
 imagePullSecrets:
   name: kms-spring-practice-regcred
-  dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJuZ29jdHRob2FuZyIsInBhc3N3b3JkIjoibWl4bWFzdGVyIiwiZW1haWwiOiJuZ29jdHRob2FuZ0BrbXMtdGVjaG5vbG9neS5jb20iLCJhdXRoIjoiYm1kdlkzUjBhRzloYm1jNmJXbDRiV0Z6ZEdWeSJ9fX0=
+  # Follow these instructions to obtain your own dockerconfigjson:
+  # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dockerconfigjson:
 
 deployment:
   image: ngoctthoang/kms-spring-practice
@@ -25,5 +28,9 @@ configMap:
   ddlAuto: create-drop
 
 secrets:
-  dbUsername: dXNlcm5hbWU=
-  dbPassword: cGFzc3dvcmQ=
+  # Your database username here.
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dbUsername:
+  # Your database password here.
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dbPassword:
