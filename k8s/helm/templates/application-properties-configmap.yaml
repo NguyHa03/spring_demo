@@ -1,0 +1,39 @@
+apiVersion: v1
+data:
+  application.properties: |-
+    # human-readable name for the application
+    spring.application.name={{ .Values.configMap.springAppName }}
+
+    # specify the port
+    server.port={{ .Values.configMap.serverPort }}
+
+    # URL of our database
+    spring.datasource.url={{ .Values.configMap.dbUrl }}
+
+    # driver library of our database
+    spring.datasource.driverClassName={{ .Values.configMap.dbDriver }}
+
+    # username of our database
+    spring.datasource.username={{ .Values.secrets.dbUsername }}
+
+    # password of our database
+    spring.datasource.password={{ .Values.secrets.dbPassword }}
+
+    # dialect of our database
+    spring.jpa.database-platform={{ .Values.configMap.dbPlatform }}
+
+    # this lets us browse the database from the browser using a GUI
+    spring.h2.console.enabled={{ .Values.configMap.h2ConsoleEnabled }}
+
+    # if our database is non-volatile, create-drop will erase everything in our database and replace it with this app's dummy data
+    # if you don't want that, change it to your desired mode.
+    # Hibernate ddl auto (create, create-drop, validate, update)
+    spring.jpa.hibernate.ddl-auto={{ .Values.configMap.ddlAuto }}
+
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2022-02-15T09:05:17Z"
+  name: application-properties-configmap
+  namespace: default
+  resourceVersion: "88963"
+  uid: 796ca3f8-dcfd-443a-a549-01840d671c5f

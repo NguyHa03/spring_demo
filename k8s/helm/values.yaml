@@ -1,0 +1,29 @@
+name: kms-spring-practice
+
+imagePullSecrets:
+  name: kms-spring-practice-regcred
+  dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJuZ29jdHRob2FuZyIsInBhc3N3b3JkIjoibWl4bWFzdGVyIiwiZW1haWwiOiJuZ29jdHRob2FuZ0BrbXMtdGVjaG5vbG9neS5jb20iLCJhdXRoIjoiYm1kdlkzUjBhRzloYm1jNmJXbDRiV0Z6ZEdWeSJ9fX0=
+
+deployment:
+  image: ngoctthoang/kms-spring-practice
+  replicaCount: 1
+
+service:
+  type: NodePort
+  ports:
+    port: 9090
+    targetPort: 9090
+    nodePort: 30001
+
+configMap:
+  springAppName: KMS - Spring Practice Application
+  serverPort: "9090"
+  dbUrl: jdbc:h2:mem:testdb
+  dbDriver: org.h2.Driver
+  dbPlatform: org.hibernate.dialect.H2Dialect
+  h2ConsoleEnabled: "true"
+  ddlAuto: create-drop
+
+secrets:
+  dbUsername: dXNlcm5hbWU=
+  dbPassword: cGFzc3dvcmQ=
