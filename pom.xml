@@ -134,6 +134,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>kms-spring-practice</finalName>
 	</build>
 
 </project>

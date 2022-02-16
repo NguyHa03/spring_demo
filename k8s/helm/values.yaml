@@ -1,0 +1,36 @@
+name: kms-spring-practice
+
+imagePullSecrets:
+  name: kms-spring-practice-regcred
+  # Follow these instructions to obtain your own dockerconfigjson:
+  # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dockerconfigjson:
+
+deployment:
+  image: ngoctthoang/kms-spring-practice
+  replicaCount: 1
+
+service:
+  type: NodePort
+  ports:
+    port: 9090
+    targetPort: 9090
+    nodePort: 30001
+
+configMap:
+  springAppName: KMS - Spring Practice Application
+  serverPort: "9090"
+  dbUrl: jdbc:h2:mem:testdb
+  dbDriver: org.h2.Driver
+  dbPlatform: org.hibernate.dialect.H2Dialect
+  h2ConsoleEnabled: "true"
+  ddlAuto: create-drop
+
+secrets:
+  # Your database username here.
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dbUsername:
+  # Your database password here.
+  # ONLY override this value through CLI. Do NOT put your credentials here, encrypted or not.
+  dbPassword:

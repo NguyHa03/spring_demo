@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kms-spring-practice-deployment
+  namespace: default
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.name }}
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.deployment.image }}
+          volumeMounts:
+            - name: application-properties-configmap-volume
+              mountPath: "/config"
+              readOnly: true
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kms-spring-practice-secrets
+                  key: dbUsername
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kms-spring-practice-secrets
+                  key: dbPassword
+      volumes:
+        - name: application-properties-configmap-volume
+          configMap:
+            name: application-properties-configmap
